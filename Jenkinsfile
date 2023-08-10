@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build("my-docker-image:latest", "-f Dockerfile .")
+                    def dockerImage = docker.build("my-docker-image:v5.0", "-f Dockerfile .")
                 }
             }
         }
