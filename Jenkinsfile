@@ -12,9 +12,8 @@ pipeline {
             steps {
                 script {
                      def imageName = "Hellow"
-                    def dockerfile = "."  // Path to your Dockerfile
-
-                    docker.build(imageName, "-f ${dockerfile} .")
+                     def dockerfile = "."  // Path to your Dockerfile
+                     docker.build(imageName, "-f ${dockerfile} .")
                 }
                 
             }
