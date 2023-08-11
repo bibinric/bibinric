@@ -16,7 +16,7 @@ pipeline {
 
                     // Build the Docker image
                     docker.build(imageName, "-f ${dockerfile} .")
-                    docker.withRegistry(https://hub.docker.com/u/bibinrich, key_1) {
+                    docker.withRegistry(docker.io, af11d75f-820a-4565-9332-eaf36c0484d6) {
                         // Push the Docker image to Docker Hub
                         docker.image(imageName).push()
                 }
