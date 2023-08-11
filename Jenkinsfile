@@ -11,8 +11,12 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t my-docker-image:latest -f Dockerfile .'
+                     def imageName = "Hellow"
+                    def dockerfile = "."  // Path to your Dockerfile
+
+                    docker.build(imageName, "-f ${dockerfile} .")
                 }
+                
             }
         }
     }
