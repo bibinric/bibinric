@@ -1,6 +1,11 @@
 pipeline {
     agent any
     
+    environment {
+        DOCKER_HUB_USERNAME = credentials(bibinrich)
+        DOCKER_HUB_PASSWORD = credentials(Ryan@0524)
+    }
+    
     stages {
         stage('Checkout') {
             steps {
@@ -11,17 +16,36 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                     def imageName = "hello-world-docker-image1"
-                     def dockerfile = "Dockerfile"  // Dockerfile in the repository root
-
+                    def imageName = "bibinrich/sample"
+                    def imageTag = "latest"
+                    def dockerFilePath = "." // Path to your Dockerfile in the repository
+                    
                     // Build the Docker image
-                    docker.build(imageName, "-f ${dockerfile} .")
-                   // docker.withRegistry(docker.io, af11d75f-820a-4565-9332-eaf36c0484d6) {
-                        // Push the Docker image to Docker Hub
-                       // docker.image(imageName).push()
+                    docker.build(imageName + ":" + imageTag, "-f ${dockerFilePath} .")
                 }
-                
             }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def imageName = "bibinrich/sample"
+                    def imageTag = "latest"
+                    
+                    // Log in to Docker Hub
+                    docker.withRegistry('https://index.docker.io/v1/', bibinrich, Ryan@0524) {
+                        // Push the Docker image to Docker Hub
+                        docker.image(imageName + ":" + imageTag).push()
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            // Clean up resources if needed
+            cleanWs()
         }
     }
 }
