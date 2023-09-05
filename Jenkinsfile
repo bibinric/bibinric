@@ -1,51 +1,31 @@
 pipeline {
     agent any
-    
-    environment {
-        DOCKER_HUB_USERNAME = credentials('bibinrich25@gmail.com')
-        DOCKER_HUB_PASSWORD = credentials('Ryan@0524')
-    }
-    
+
     stages {
         stage('Checkout') {
             steps {
+                // Checkout your code from the version control repository
                 checkout scm
             }
         }
         
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
-                script {
-                    def imageName = "bibinrich25@gmail.com/sample"
-                    def imageTag = "latest"
-                    def dockerFilePath = "." // Path to your Dockerfile in the repository
-                    
-                    // Build the Docker image
-                    docker.build(imageName + ":" + imageTag, "-f ${dockerFilePath} .")
-                }
+                // Compile your Java code
+                sh 'javac HelloWorld.java'
             }
         }
         
-        stage('Push Docker Image') {
+        stage('Test') {
             steps {
-                script {
-                    def imageName = "bibinrich25@gmail.com/sample"
-                    def imageTag = "latest"
-                    
-                    // Log in to Docker Hub
-                    docker.withRegistry('https://index.docker.io/v1/', bibinrich25@gmail.com, Ryan@0524) {
-                        // Push the Docker image to Docker Hub
-                        docker.image(imageName + ":" + imageTag).push()
-                    }
-                }
+                // You can add your testing commands here if needed
             }
         }
-    }
-    
-    post {
-        always {
-            // Clean up resources if needed
-            cleanWs()
+        
+        stage('Deploy') {
+            steps {
+                // You can add your deployment commands here if needed
+            }
         }
     }
 }
